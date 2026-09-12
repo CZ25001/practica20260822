@@ -3,7 +3,10 @@ const jwt = require('jsonwebtoken');
 // Verificar validez del Token JWT
 exports.verificarToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1]; // Expects: "Bearer <TOKEN>"
+  const tokenHeader = authHeader && authHeader.split(' ')[1]; // Formato "Bearer <TOKEN>"
+
+  // Extrae el token desde el Header O desde la Cookie HttpOnly
+  const token = tokenHeader || req.cookies?.token;
 
   if (!token) {
     return res.status(401).json({ mensaje: 'Acceso denegado: Token no proporcionado' });
